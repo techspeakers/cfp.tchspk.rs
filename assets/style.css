@@ -1,0 +1,143 @@
+body {
+  font-family: 'Open Sans Condensed', sans-serif;
+
+  background-image: url(/assets/img/mtscfps.png);
+  background-position: top center;
+  background-color: #0ac;
+  color: white;
+
+  background-size: 20vh 20vh;
+  background-repeat: no-repeat;
+  padding-top: 20vh;
+
+  display: flex;
+  justify-content: center;
+}
+
+/* fluid font-sizing */
+body {
+  font-size: 4vw;
+}
+@media (min-width: 72rem) {
+  body {
+    font-size: 3rem;
+  }
+}
+@media (max-width: 24rem) {
+  body {
+    font-size: 1rem;
+  }
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+a:hover, li a:focus, li a:active {
+  color: #fa0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style-type: none;
+  margin-bottom: .6em;
+}
+li>a {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  line-height: 1.2;
+}
+
+time {
+  font-weight: bold;
+  flex: 0 0 5em;
+}
+
+.location {
+  white-space: nowrap;
+}
+
+
+
+/* Inline location */
+.location::before {
+  content: '(';
+}
+.location::after {
+  content: ')';
+}
+
+
+
+/* Small mobile screens */
+@media (max-width: 24rem) {
+  li a {
+    flex-direction: column;
+  }
+  time,
+  .event,
+  .location {
+    flex: 0;
+  }
+
+  time,
+  .event,
+  .location {
+    margin-bottom: .2em;
+  }
+  .location::before, li .location::after {
+    content: '';
+  }
+  .location {
+    font-size: .8em;
+  }
+}
+
+
+
+/* Grid */
+@supports (display: grid) {
+  .location::before,
+  .location::after {
+    content: '';
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    column-gap: 1em;
+    grid-template-areas:
+      "date  title"
+      "date  location";
+  }
+  li>a { display: contents }
+  time {
+    grid-area: date;
+  }
+  .event {
+    grid-area: title;
+  }
+  .location {
+    grid-area: location;
+    font-size: .8em;
+  }
+
+  @media (max-width: 24rem) {
+    li {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "date"
+        "title"
+        "location";
+    }
+  }
+}
+
+ul {
+  max-width: 100vh;
+}
