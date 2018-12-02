@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "alias": "cfp.tchspk.rs",
+  "builds": [
+    { "src": "*.html", "use": "@now/static" },
+    { "src": "assets/**/*", "use": "@now/static" }
+  ]
+}
