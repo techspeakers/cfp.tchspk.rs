@@ -1,8 +1,15 @@
 {
   "version": 2,
   "alias": "cfp.tchspk.rs",
+  "env": {
+    "MONGODB_HOST": "@mongodb-host",
+    "MONGODB_USER": "@mongodb-user",
+    "MONGODB_PASSWORD": "@mongodb-password",
+    "CALENDAR_URL": "@calendar-url"
+  },
   "builds": [
     { "src": "*.html", "use": "@now/static" },
-    { "src": "assets/**/*", "use": "@now/static" }
+    { "src": "assets/**/*", "use": "@now/static" },
+    { "src": "api/**/*.js", "use": "@now/node" }
   ]
 }
