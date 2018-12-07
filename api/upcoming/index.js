@@ -1,35 +1,24 @@
-const mongo = require('@techspeakers/mongoclient')
+const { send } = require('micro')
+const run = require('./data.js')
 
-//run()
+module.exports = async (req, res) => {
+  const q = require('url').parse(req.url, true).query || {}
+  const format = !q.format || q.format === '$format' ? '' : q.format
 
-async function run() {
-  const db = await mongo.connect()
-  const cfpcal = db.collection('cfpcal')
+  const data = await run()
 
-  const today = utcStartOfDay()
-
-  const hits = await cfpcal.find({ start: { $gt: today } }).toArray()
-
-  console.log(hits.length + ' upcoming CFPs')
-  return hits
-}
-
-function utcStartOfDay(date) {
-  const d = date && date instanceof Date ? date : new Date()
-    d.setUTCHours(0)
-    d.setUTCMinutes(0)
-    d.setUTCSeconds(0)
-    d.setUTCMilliseconds(0)
-
-  return d
-}
-
-module.exports = (req, res) => {
-  run().then(data => {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
+  // Send as JSON
+  if (format === 'json') {
+    send(res, 200, {
       status: 'OK',
+      format: format,
       hits: data
-    }))
-  })
+    })
+
+  // Send as webpage
+  } else {
+    const rendered = require('./render')(data)
+    send(res, 200, rendered)
+
+  }
 }

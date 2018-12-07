@@ -10,6 +10,9 @@
   "builds": [
     { "src": "*.html", "use": "@now/static" },
     { "src": "assets/**/*", "use": "@now/static" },
-    { "src": "api/**/*.js", "use": "@now/node" }
+    { "src": "api/**/index.js", "use": "@now/node" }
+  ],
+  "routes": [
+    { "src": "/(upcoming|calsync)(?:\\.(?<format>json|xml))?", "dest": "/api/$1/index.js?format=$format" }
   ]
 }

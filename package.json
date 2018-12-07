@@ -1,9 +1,11 @@
 {
   "dependencies": {
     "@techspeakers/json-calendar": "^0.1.2",
-    "@techspeakers/mongoclient": "^0.1.0"
+    "@techspeakers/mongoclient": "^0.1.0",
+    "micro": "^9.3.3"
   },
   "devDependencies": {
+    "micro-dev": "^3.0.0",
     "ncc": "^0.3.6"
   }
 }
