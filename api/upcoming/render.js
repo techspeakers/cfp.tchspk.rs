@@ -1,18 +1,17 @@
-const parseEvent = require('./parseevent')
+const parseEvent = require('../parseevent')
 
 const month = (date) => {
   return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][
-    typeof date === 'object' ? date.getMonth() : date
+    typeof date === 'object' ? date.getUTCMonth() : date
   ]
 }
 
 const day = (date) => {
-  return String(typeof date === 'object' ? date.getDate() : date).padStart(2, '0')
+  return String(typeof date === 'object' ? date.getUTCDate() : date).padStart(2, '0')
 }
 
 const renderEventListItem = (event) => {
-  const { url, location, title } = parseEvent(event)
-  const deadline = new Date(event.start)
+  const { deadline, url, location, title, twitter } = event
 
   return `<li>
     <a class="t" href="${url||''}" target="_blank">

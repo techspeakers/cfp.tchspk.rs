@@ -1,5 +1,5 @@
 const { send } = require('micro')
-const run = require('./data.js')
+const run = require('./data')
 
 module.exports = async (req, res) => {
   const q = require('url').parse(req.url, true).query || {}

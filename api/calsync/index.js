@@ -1,7 +1,9 @@
 const cal = require('@techspeakers/json-calendar')
 const mongo = require('@techspeakers/mongoclient')
 
-//run()
+const parseEvent = require('../parseevent')
+
+
 
 async function run() {
   const calendarUrl = process.env['CALENDAR_URL']
@@ -10,19 +12,36 @@ async function run() {
 
   try {
     const caldata = await cal.fromUrl(calendarUrl)
-    console.log(caldata.events ? `${caldata.events.length} events tracked` : '')
+    if (caldata.events) console.log(`${caldata.events.length} events on calendar`)
 
     const db = await mongo.connect()
     console.log('Database open.')
 
+
+    // Dump the verbatim calendar data (just for safekeeping)
     const cfpcal = db.collection('cfpcal')
     console.log('Opened `cfpcal` collection...')
 
     await cfpcal.deleteMany({})
     await cfpcal.insertMany(caldata.events, {})
 
-    console.log('Exported CFP calendar events to the central TS database.')
-    return caldata.events
+    console.log('Backed up CFP calendar events in the central TS database.')
+
+
+    // Preprocess & save the CFP calendar data in the DB
+    const parsed = caldata.events.map(e => parseEvent(e))
+    console.log(`Parsed & processed ${parsed.length} events`)
+
+    const cfpdb = db.collection('cfps')
+    console.log('Opened `cfps` collection...')
+
+    //TODO: instead of simply overwriting the db sync/update events
+    //      based on the entry's lastModified date (also perhaps log changes)
+    await cfpdb.deleteMany({})
+
+    await cfpdb.insertMany(parsed, {})
+
+    return parsed
   }
   catch (e) {
     console.error(e)
