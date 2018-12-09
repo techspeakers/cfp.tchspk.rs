@@ -12,13 +12,12 @@ module.exports = (e) => {
 
   // Deadline date
   // CFP calendar entries are full-day events
+  // During parsing these dates are interpreted in the current timezone,
+  // we need to correct these to UTC time before we store them in the DB
   let deadline = tzCorrect(startOfDayUTC( new Date((end.getTime()/2 + start.getTime()/2) )))
 
   // Length of the event in days
   let days = Math.round( (end - start) / 1000/60/60/24 )
-
-  // Days until the event (0 - it's today, 1 - tomorrow, etc...)
-  let daysUntil = Math.round( (startOfDayUTC(start) - startOfDayUTC()) / 1000/60/60/24 )
 
   let title = e.summary.replace(/\([^\)]*\)/g,'').trim()
   // Clean extra info from title
@@ -60,7 +59,7 @@ module.exports = (e) => {
 
     title, event, url, twitter, location, date, place,
 
-    days, daysUntil,
+    days,
 
     lastModified,
 
